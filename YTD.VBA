@@ -1,3 +1,4 @@
+'This script generates a report based on a folder of monthly reports. It requries a redacted top sheet. 
 Public MadetoEnd As Boolean    'Used to check if update runs
 Public Save      As Boolean    'Determines if Sheet should be saved automatically
 Public numDays   As Integer    'Holds calculated number of days
