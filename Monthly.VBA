@@ -1,3 +1,4 @@
+'This script sorts and stylizes a monthly report. This report requires a redacted top sheet to function properly.
 Private Sub CommandButton1_Click()
 Dim Monthstr As String
 Dim Yearstr As String
