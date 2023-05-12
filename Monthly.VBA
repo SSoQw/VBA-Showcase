@@ -80,8 +80,10 @@ For numSheet = 2 To ThisWorkbook.Sheets.Count
     End With
     ActiveWindow.FreezePanes = True
             
-
-    
+    'Calculate Percent of time in office
+    For i = 2 To lRow
+        Sheets(numSheet).Cells(i, 5) = Sheets(numSheet).Cells(i, 4) / CDbl(busDays)
+    Next
     
     'Set Column Data type
     Sheets(numSheet).Range("A2:C" & lRow).NumberFormat = "general"
