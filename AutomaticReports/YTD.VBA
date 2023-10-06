@@ -1,4 +1,3 @@
-'This script generates a report based on a folder of monthly reports. It requries a redacted top sheet. 
 Public MadetoEnd As Boolean    'Used to check if update runs
 Public Save      As Boolean    'Determines if Sheet should be saved automatically
 Public numDays   As Integer    'Holds calculated number of days
@@ -112,8 +111,19 @@ NextCode:
                 wb.Activate
                 lRow = Worksheets(i).Cells(Rows.Count, 4).End(xlUp).Row
                 'Loop through all rows for current location's month files.
-                sheetData = Worksheets(i).Range("A2:D" & lRow).Value
-                    If firstMonth Then
+                'If there are no entries for the location in a given month, use placeholder
+                If (lRow = 1) Then
+                    ReDim sheetData(1 To 1, 1 To 5)
+                    sheetData(1, 1) = "Placeholder1"
+                    sheetData(1, 2) = "Placeholder2"
+                    sheetData(1, 3) = "Placeholder3"
+                    sheetData(1, 4) = 0
+                    sheetData(1, 5) = 0
+                Else
+                    sheetData = Worksheets(i).Range("A2:D" & lRow).Value
+                End If
+                    
+                    If (firstMonth) Then
                         employeeData = sheetData
                         firstMonth = False
                         compSheet = Worksheets(i).Name
@@ -257,6 +267,13 @@ Private Sub CommandButton1_Click()
         
             lRow = ThisWorkbook.Worksheets(numSheet).Cells(Rows.Count, 5).End(xlUp).Row
             
+            For i = 2 To lRow
+                If ThisWorkbook.Worksheets(numSheet).Cells(i, "A").Value = "Placeholder1" Then
+                    ThisWorkbook.Worksheets(numSheet).Rows(i).Delete
+                    lRow = lRow - 1
+                End If
+            Next
+            
             'Format Headers
             ThisWorkbook.Worksheets(numSheet).Activate
             Sheets(numSheet).Range("A1:E1").Font.Bold = True
@@ -302,6 +319,7 @@ Private Sub CommandButton1_Click()
                     ActiveSheet.Range("A:E").Rows(i).Interior.Color = xlNone
                 End If
             Next
+            Sheets(1).Cells(numSheet + 1, 1) = Sheets(numSheet).Name & "-" & (lRow - 1)
         Next
         
         MsgBox "All Done!", vbInformation, "Operation Completed"
